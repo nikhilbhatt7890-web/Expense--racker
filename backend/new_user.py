@@ -2,7 +2,6 @@
 class work :
     def __init__(self,name:str):
         self.name = name
-        self.file =f"backend/{self.name}_data.txt"
         # self.u_email = ""
         # self.bnk_name = ""
         # self.bal = ""
@@ -20,7 +19,7 @@ class work :
             
 
     def create_account(self):
-        with open(self.file,"w") as f :
+        with open(f"backend/{self.name}_data.txt","w") as f :
             self.details()
             user_info = {
                 "user_name":self.name,
@@ -29,43 +28,16 @@ class work :
                 "account_bal":self.bal,
             }
             f.write(str(user_info))
-
-
-    def authenticate(self):
-        # self.name = self.name.lstrip
-        try:
-            with open(self.file,"r"):
-               return True
-            
-        except FileNotFoundError:
-            print("file not found ")
-            return False
-        
-        except Exception as e :
-            return None
-    
-       
-    def assign_work(self,exists):
-        case = {
-        True:"ALR_EXISTS",
-        False:self.create_account, ###### assign work
-        None:"ERROR"
-    }
-        if not exists :
-            case[exists]()
-        else:
-            return exists
+        return "NEW_SUCCESS"
 
     
    
 
-def new(name):
-
+def new(name): 
     main_obj = work(name)
-    exists = main_obj.authenticate()
-    to_do = main_obj.assign_work(exists)
+    status = main_obj.create_account()
     # print(to_do)
-    return to_do  
+    return status  
 
-new(input("name = "))   #learn about the re moduel
+# new(input("name = "))   #learn about the re moduel
  # find a way to solve the same name in diffrent format problem

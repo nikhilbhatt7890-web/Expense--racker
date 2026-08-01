@@ -3,52 +3,75 @@ from key import key
 from login import login
 
 USER_NAME = input("hello their may i know your name ? : ").lower()
-def do_nothing():
-     pass
 
-def alr_exists(self):
-        pass
 
-def initialization():
+def authenticate():
+        
+        file = f"backend/{USER_NAME}_data.txt"
+        try:
+            with open(file,"r"):
+               return True
+            
+        except FileNotFoundError:
+            print("file not found ")
+            return False
+        
+        except Exception as e :
+            print(e)
+            return None
+    
+def after_new_login(name):
+     print("--"*10)
+     print(f"Thank you {name}\n For choosing us\nYour registration is successfull\n")
+     
+def terminate(name):
+     print(f"\nsorry {name} but something bad happen in our side ")
+     
+def errorhappend(name):
+        print(f"\nWelcome back {USER_NAME}")
+        return "ERROR_IN_TRACING_FILE"
+
+def initialization(name):
     while True:   
         try :
                 user_input = input(
-                     "what do you wana do\n1) new application(type 'new') \n" \
-                     "2) have a keyword (type 'key')\n" \
-                     "3) login using mobile number (type 'login') \n" \
+                     "what do you wana do\n" \
+                     "1) use a keyword (type 'key')\n" \
+                     "2) login using mobile number (type 'login') \n" \
                      "plz enter a valid response -> : "
                 ).upper()
 
                 if user_input in AVL_OPTIONS :
                     print()
                     return user_input
-                else :
-                    raise KeyError
                 
-        except KeyError as k: 
+        except KeyError: 
                 print("\n INVALID INPUT : \n")
                 continue
 
-AVL_OPTIONS = {
-    "NEW":new,
-    "KEY":key,
-    "LOGIN" : login
-}
-
-def start_working():
-    work = AVL_OPTIONS[initialization()]
-    next = work(USER_NAME)
-    options = {
-         "ALR_EXISTS":initialization, #### assign a work
-         None:do_nothing   
-    }
-    again = options[next]
-    again()  ##### assign a work
-
-
+def start_working(task):
+    work = AVL_OPTIONS[task]
+    next_work = work(USER_NAME)
+    start = AVL_OPTIONS[next_work]
+    start(USER_NAME)
     
+
+     
+     
+
+AVL_OPTIONS = {
+    True : initialization,
+    False:new,
+    None:errorhappend,
+    "KEY":key,
+    "LOGIN" : login,
+    "NEW_SUCCESS":after_new_login,
+    "ERROR_IN_TRACING_FILE" : terminate
+
+}
+ 
 if __name__ == "__main__":
-    print(f"\n{USER_NAME} we welcome you to our banking system\n")
-    start_working()
+    assignee = authenticate()
+    start_working(assignee)
 
     

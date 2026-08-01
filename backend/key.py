@@ -1,2 +1,2 @@
-def key():
+def key(name):
     print("valid key")

@@ -1,2 +1,2 @@
-def login():
+def login(name):
     print("login succesfull")
