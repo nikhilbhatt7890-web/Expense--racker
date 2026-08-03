@@ -16,18 +16,24 @@ class work :
                 except Exception :
                     print("\nenter a vaild bank balance")
                     continue
+            print("-"*10)
+            self.key = input("\nCreate a login key :   ").lower()
+
+
             
 
     def create_account(self):
         with open(f"backend/{self.name}_data.txt","w") as f :
             self.details()
-            user_info = {
+            user_data = {
                 "user_name":self.name,
                 "user_email":self.u_email,
                 "bank_acc_name":self.bnk_name,
                 "account_bal":self.bal,
+                "key":self.key
             }
-            f.write(str(user_info))
+
+            f.write(str(user_data))
         return "NEW_SUCCESS"
 
     

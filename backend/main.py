@@ -1,8 +1,8 @@
 from new_user import new
 from key import key
-from login import login
 
-USER_NAME = input("hello their may i know your name ? : ").lower()
+
+USER_NAME = input("Hello their may i know your name ? : ").lower()
 
 
 def authenticate():
@@ -13,7 +13,6 @@ def authenticate():
                return True
             
         except FileNotFoundError:
-            print("file not found ")
             return False
         
         except Exception as e :
@@ -23,21 +22,25 @@ def authenticate():
 def after_new_login(name):
      print("--"*10)
      print(f"Thank you {name}\n For choosing us\nYour registration is successfull\n")
+     next = initialization(name)
+     key_r = AVL_OPTIONS[next](name)
+     return key_r
+
      
 def terminate(name):
      print(f"\nsorry {name} but something bad happen in our side ")
      
 def errorhappend(name):
-        print(f"\nWelcome back {USER_NAME}")
+        
         return "ERROR_IN_TRACING_FILE"
 
 def initialization(name):
+    
     while True:   
         try :
                 user_input = input(
-                     "what do you wana do\n" \
-                     "1) use a keyword (type 'key')\n" \
-                     "2) login using mobile number (type 'login') \n" \
+                     "Want to login using a keyword\n" \
+                     "(type 'key')\n" \
                      "plz enter a valid response -> : "
                 ).upper()
 
@@ -53,7 +56,8 @@ def start_working(task):
     work = AVL_OPTIONS[task]
     next_work = work(USER_NAME)
     start = AVL_OPTIONS[next_work]
-    start(USER_NAME)
+    key_done = start(USER_NAME)
+    print(AVL_OPTIONS[key_done])
     
 
      
@@ -64,9 +68,10 @@ AVL_OPTIONS = {
     False:new,
     None:errorhappend,
     "KEY":key,
-    "LOGIN" : login,
     "NEW_SUCCESS":after_new_login,
-    "ERROR_IN_TRACING_FILE" : terminate
+    "ERROR_IN_TRACING_FILE" : terminate,
+    "APPROVED":"SUCCESS",
+    "UNAPPROVED":"TERMINATE"
 
 }
  
