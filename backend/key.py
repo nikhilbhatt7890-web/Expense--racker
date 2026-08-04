@@ -15,9 +15,11 @@ class user_login :
         while True:
             entered_key = input("Enter your login key: ").strip().lower()
 
-            if entered_key.lower() == "quit":
+            if entered_key == "quit":
+                print("---"*20)
                 print("Program terminated.")
-                return "UNAPPROVED"
+                print("--"*20)
+                return None
 
             if entered_key == self.key:
                 print("Key matched successfully.")
@@ -39,7 +41,6 @@ def key(name):
     print("-"*50)
     data = derive_data(name)
     work = user_login(name,data)
-    status = work.start_authentication()
-    return status
-
+    return  work.start_authentication()
+   
 
