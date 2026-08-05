@@ -1,6 +1,6 @@
 from new_user import new
 from key import key
-from user_intraction import Start_intraction
+from main_interaction import Start_interaction
 
 USER_NAME = input("Hello their may i know your name ? : ").lower()
 
@@ -61,7 +61,7 @@ def start_working(task:bool): # task values: true or false
     key_status = AVL_OPTIONS[initialize_work](USER_NAME)  # output --> approved , none 
     if key_status is None:
              return "END"                        
-    intraction_start = AVL_OPTIONS[key_status](USER_NAME) # output --> yet to decide 
+    interaction_start = AVL_OPTIONS[key_status](USER_NAME) # output --> yet to decide 
     print("success till interaction")
 
     
@@ -70,13 +70,15 @@ AVL_OPTIONS = {
     False:new,
     "KEY":key,
     "NEW_SUCCESS":initialization,
-    "APPROVED":Start_intraction,
+    "APPROVED":Start_interaction,
 }
  
 if __name__ == "__main__":
+    
     exists_status = authenticate()
     if exists_status is None :
             terminate(USER_NAME)
     start_working(exists_status)
+
 
     
