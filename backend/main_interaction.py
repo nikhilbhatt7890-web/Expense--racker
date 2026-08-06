@@ -58,4 +58,3 @@ def Start_interaction(name):
     Bank.current_bank_balance()
 
 
-Start_interaction("nikhil")
