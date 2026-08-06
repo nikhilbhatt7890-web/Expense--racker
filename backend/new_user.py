@@ -1,4 +1,4 @@
-
+import get_positive_num as number 
 class work :
     def __init__(self,name:str):
         self.name = name
@@ -9,13 +9,7 @@ class work :
     def details(self):
             self.u_email = input("\nlet us start the process \ntell your EMAIL_ID : " )
             self.bnk_name = input("\nNoted the bank in which you have your account\n(bank name): ")
-            while True:
-                try : 
-                    self.bal = int(input("\nyour bank balance : "))
-                    break
-                except Exception :
-                    print("\nenter a vaild bank balance")
-                    continue
+            self.bal = number.get_positive("\nyour bank balance")
             print("-"*10)
             self.key = input("\nCreate a login key :   ").lower()
 
@@ -45,5 +39,3 @@ def new(name):
     # print(to_do)
     return status  
 
-# new(input("name = "))   #learn about the re moduel
- # find a way to solve the same name in diffrent format problem

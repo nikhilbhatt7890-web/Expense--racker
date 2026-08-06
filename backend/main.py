@@ -21,7 +21,7 @@ def authenticate():
     
 # def after_new_login(name):
 #      print("--"*10)
-#      print(f"Thank you {name}\n For choosing us\nYour registration is successfull\n")
+#      print(f"Thank you {name}\n For choosing us\nYour registration is successful\n")
 #      next = initialization(name)
 #      key_r = AVL_OPTIONS[next](name)
 #      return key_r
@@ -30,8 +30,7 @@ def authenticate():
 def terminate(name):
      print(f"\nsorry {name} but something bad happen in our side ")
      
-# def errorhappend(name):
-#         return "ERROR_IN_TRACING_FILE"
+
 
 def initialization(name):
     print("--"*20,"\n")
@@ -42,7 +41,7 @@ def initialization(name):
                      "Want to login using a keyword\n" \
                      "(type 'key')\n" \
                      "plz enter a valid response -> : "
-                ).upper()
+                ).upper().strip()
 
                 if user_input in AVL_OPTIONS :
                     print()
