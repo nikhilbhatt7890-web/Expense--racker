@@ -1,4 +1,4 @@
-def get_positive(prompt):
+def get_positive(prompt:str):
     while True :
         try :
 
