@@ -59,7 +59,7 @@ class python_banking:
     def expense(self):# --> completed
 
         expense_amount = number.get_positive("Enter the expense amount (₹): ")
-        self.expense_type(expense_amount)
+        expense_data = self.user_cattype(expense_amount)
         self.update_bank_balance(expense_amount,"EXPENSE")
         return self.proceed()
 
@@ -67,38 +67,56 @@ class python_banking:
     def check_expense(expense_data:dict,expense_amount:int):  # --> no work defined 
          pass 
 
+    def get_cat(self,prompt:str,categories:list):
 
-    def expense_type(self,total_amount):  # todo : upgrade  the quality of code 
- 
+        while True: 
+            user_cat = input(f"{prompt}\nEnter your categories: ").upper().strip()
+            if user_cat not in categories : 
+                print("\nINVALID CATEGORY\n")
+                continue
+            return user_cat
+        
+    def get_amount(self,user_cat:str,total_amount:int,total_expense_added:int):
+         while True:
+            amount = number.get_positive(f"How much for {user_cat}: ")
+            
+            if amount > total_amount or amount + total_expense_added > total_amount :
+                print('\n❌ Cannot be more than total expense')
+                continue
+            return amount
+         
+    def user_cattype(self,total_amount): 
         expense_categories = {
-    "FOOD": 0,
-    "GROCERIES": 0,
-    "RENT": 0,
-    "ELECTRICITY": 0,
-    "WATER": 0,
-    "INTERNET": 0,
-    "MOBILE RECHARGE": 0,
-    "TRANSPORTATION": 0
+        "FOOD": 0,
+        "GROCERIES": 0,
+        "RENT": 0,
+        "ELECTRICITY": 0,
+        "WATER": 0,
+        "INTERNET": 0,
+        "MOBILE RECHARGE": 0,
+        "TRANSPORTATION": 0
       }
 
         Categories = expense_categories.keys()
+        prompt = ":\n".join(Categories)
+        total_expense_added = 0  
+        while True:
 
-        prompt = "\n".join(Categories)
-        while True:   
-          expense_t = input(f"{prompt}\nENTER ONE OF THE OPTIONS ABOVE : ").upper().strip()
+            user_cat = self.get_cat(prompt,Categories)
+            amount = self.get_amount(user_cat,total_amount,total_expense_added)
 
-          if expense_t in Categories :   
-               how_much = number.get_positive(f"How much for {expense_t}: ")
-               expense_categories[expense_t] += how_much
-               done = self.compare((input("\ndone adding all expense 'yes' to save : ").upper().strip()),"YES")
-               
-               if done  :
-                   print('\nHAVE TO COMPLETE IT Tomorow ')
-                   return
-        
-               continue
-          print('\nWRONG CATEGORY\n')
+            total_expense_added += amount
 
+            expense_categories[user_cat] += amount
+            if sum(expense_categories.values()) == total_amount :
+                print('\nDone adding expenses')
+                self.data["EXPENSE_HISTORY"] = expense_categories
+                return expense_categories 
+            
+            
+                         #    done = self.compare((input("\ndone adding all expense 'yes' to save : ").upper().strip()),"YES")
+                            
+           
 
     def add_money(self):
 
@@ -140,7 +158,7 @@ def Start_interaction(name):
             "SHOW BALANCE":Bank.current_bank_balance,
             "ADD":Bank.add_money,
             "EXPENSE":Bank.expense,
-            "REPORT":Bank.expense_type,
+            "REPORT":Bank.generate_report,
             'QUIT':"return"
             }
     
@@ -154,4 +172,4 @@ def Start_interaction(name):
     
     
 
-# Start_interaction("nikhil")
+# Start_interaction("nikhil") 
