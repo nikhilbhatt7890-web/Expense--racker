@@ -59,13 +59,12 @@ class python_banking:
     def expense(self):# --> completed
 
         expense_amount = number.get_positive("Enter the expense amount (₹): ")
-        expense_data = self.user_cattype(expense_amount)
+        expense_data = self.user_expense_type(expense_amount)
         self.update_bank_balance(expense_amount,"EXPENSE")
         return self.proceed()
 
 
-    def check_expense(expense_data:dict,expense_amount:int):  # --> no work defined 
-         pass 
+
 
     def get_cat(self,prompt:str,categories:list):
 
@@ -85,7 +84,7 @@ class python_banking:
                 continue
             return amount
          
-    def user_cattype(self,total_amount): 
+    def user_expense_type(self,total_amount): 
         expense_categories = {
         "FOOD": 0,
         "GROCERIES": 0,
@@ -124,12 +123,14 @@ class python_banking:
         money = number.get_positive(prompt)
         self.update_bank_balance(money,"ADD")
         print("success")
+        return self.proceed()
 
 
     def update_bank_balance(self,money:int,transaction_type):
         with open(f"backend/{self.name}_data.txt","w") as f :  
             if transaction_type=="ADD":
                         self.data["account_bal"] += money
+                        print('SUCCESS fully added into your bank balance ')
             elif transaction_type=="EXPENSE":
                         self.data["account_bal"] -= money
             else :
@@ -145,7 +146,31 @@ class python_banking:
 
     # untouched files 
     def generate_report(self):
-        ...
+        print('\nLast transaction report\n')
+        default = 18 
+        print("┌" + "─" * 20 + "┐")
+        
+
+
+        for i in range(12):
+          if i == 1 :
+               print("|"+" "*3+"PYTHON BANKING"+" "*3+"|")
+          elif i == 3 :
+               print("|"+" "*2+"Name - "+f"{self.name}"+" "*(default-len(self.name)-7)+"|")
+          elif i == 4 :
+               account = self.data['bank_acc_name']
+               print("|"+" "*2+"Bank - "+f"{account}"+" "*(default-len(account)-7)+"|")
+          elif i == 6 :
+               print("|"+" "*2+"Transactions"+" "*6+"|")
+          elif i == 8 :
+               pass
+          else :              
+               print("|"+" "*(default+2)+"|")
+            
+        
+        print("└" + "─" * 20 + "┘")
+                    
+       
 
     def update_data(new_data): 
         ...
@@ -172,4 +197,6 @@ def Start_interaction(name):
     
     
 
-# Start_interaction("nikhil") 
+# # Start_interaction("nikhil") 
+# c = python_banking("nikhil")
+# c.generate_report()

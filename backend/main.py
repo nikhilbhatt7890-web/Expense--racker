@@ -1,8 +1,15 @@
 from new_user import new
 from key import key
 from main_interaction import Start_interaction
+while True:
+     USER_NAME = input("Hello their may i know your name ? (max 10 char): ").lower()
+     if len(USER_NAME) > 10 :
+          print("Name can only have at most 10 charactors ")
+          continue
+     break
+     
+     
 
-USER_NAME = input("Hello their may i know your name ? : ").lower()
 
 
 def authenticate():
