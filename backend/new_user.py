@@ -24,7 +24,28 @@ class work :
                 "user_email":self.u_email,
                 "bank_acc_name":self.bnk_name,
                 "account_bal":self.bal,
-                "key":self.key
+                "key":self.key,
+                "ADD_HISTORY":{
+                           "SALARY": 0,
+                            "FREELANCING": 0,
+                            "BUSINESS": 0,
+                            "POCKET MONEY": 0,
+                            "GIFT": 0,
+                            "INTEREST": 0,
+                            "REFUND": 0,
+                            "INVESTMENT": 0,
+                            "OTHER": 0
+                },
+                "EXPENSE_HISTORY":{
+                     "FOOD": 0,
+                    "GROCERIES": 0,
+                    "RENT": 0,
+                    "ELECTRICITY": 0,
+                    "WATER": 0,
+                    "INTERNET": 0,
+                    "MOBILE RECHARGE": 0,
+                    "TRANSPORTATION": 0
+                 }
             }
 
             f.write(str(user_data))

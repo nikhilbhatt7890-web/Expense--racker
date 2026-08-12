@@ -2,9 +2,8 @@ from key import derive_data
 import get_positive_num as number
 class python_banking:
     def __init__(self,name:str):
-        self.name = name 
-        self.data = derive_data(name)
-        self.user_name = name
+        self.name:str = name 
+        self.data:dict = derive_data(name)
         
     
     def compare(self,to_be_com,to_com):
@@ -12,8 +11,43 @@ class python_banking:
               return True
          return False
 
+    def get_cat(self,prompt:str,categories:list):
 
-    def take_request(self,avl_operations): # --> completed
+        while True: 
+            user_cat = input(f"{prompt}\nEnter your categories: ").upper().strip()
+            if user_cat not in categories : 
+                print("\nINVALID CATEGORY\n")
+                continue
+            return user_cat
+        
+    def get_amount(self,user_cat:str,total_amount:int,total_added:int):
+         while True:
+            amount = number.get_positive(f"How much for {user_cat}: ")
+            
+            if amount > total_amount or amount + total_added > total_amount :
+                print('\n❌ Cannot be more than total expense')
+                continue
+            return amount
+    
+    def Transaction_type(self,trans_type:str,Categories:list,total_amount:int):
+            
+            
+            prompt = ":\n".join(Categories)
+            total_added = 0  
+            while True:
+             
+                user_cat = self.get_cat(prompt,Categories)
+                amount = self.get_amount(user_cat,total_amount,total_added)
+             
+                total_added += amount
+             
+                Categories[user_cat] += amount
+                if sum(Categories.values()) == total_amount :
+                    print('\nDone adding expenses')
+                    self.data[f"{trans_type.upper()}_HISTORY"] = Categories
+                    return Categories 
+                
+    def take_request(self,avl_operations:dict): # --> completed
         
         menu = """   Choose an option:
         1. Show bank balance  (type: show balance)
@@ -55,81 +89,33 @@ class python_banking:
 
         return self.proceed()
 
-
+    
     def expense(self):# --> completed
-
+        
         expense_amount = number.get_positive("Enter the expense amount (₹): ")
-        expense_data = self.user_expense_type(expense_amount)
+    
+        expense_data = self.Transaction_type("EXPENSE",self.data["EXPENSE"],expense_amount)
         self.update_bank_balance(expense_amount,"EXPENSE")
         return self.proceed()
-
-
-
-
-    def get_cat(self,prompt:str,categories:list):
-
-        while True: 
-            user_cat = input(f"{prompt}\nEnter your categories: ").upper().strip()
-            if user_cat not in categories : 
-                print("\nINVALID CATEGORY\n")
-                continue
-            return user_cat
-        
-    def get_amount(self,user_cat:str,total_amount:int,total_expense_added:int):
-         while True:
-            amount = number.get_positive(f"How much for {user_cat}: ")
-            
-            if amount > total_amount or amount + total_expense_added > total_amount :
-                print('\n❌ Cannot be more than total expense')
-                continue
-            return amount
-         
-    def user_expense_type(self,total_amount): 
-        expense_categories = {
-        "FOOD": 0,
-        "GROCERIES": 0,
-        "RENT": 0,
-        "ELECTRICITY": 0,
-        "WATER": 0,
-        "INTERNET": 0,
-        "MOBILE RECHARGE": 0,
-        "TRANSPORTATION": 0
-      }
-
-        Categories = expense_categories.keys()
-        prompt = ":\n".join(Categories)
-        total_expense_added = 0  
-        while True:
-
-            user_cat = self.get_cat(prompt,Categories)
-            amount = self.get_amount(user_cat,total_amount,total_expense_added)
-
-            total_expense_added += amount
-
-            expense_categories[user_cat] += amount
-            if sum(expense_categories.values()) == total_amount :
-                print('\nDone adding expenses')
-                self.data["EXPENSE_HISTORY"] = expense_categories
-                return expense_categories 
-            
-            
-                         #    done = self.compare((input("\ndone adding all expense 'yes' to save : ").upper().strip()),"YES")
-                            
-           
-
-    def add_money(self):
+      
+    def add_money(self): # --> completed
 
         prompt = "How much money do you want to add : "
         money = number.get_positive(prompt)
+        self.Transaction_type("ADD",self.ALL_categories["ADD"],money)
         self.update_bank_balance(money,"ADD")
+
         print("success")
         return self.proceed()
 
+    
+                     
 
     def update_bank_balance(self,money:int,transaction_type):
         with open(f"backend/{self.name}_data.txt","w") as f :  
             if transaction_type=="ADD":
                         self.data["account_bal"] += money
+
                         print('SUCCESS fully added into your bank balance ')
             elif transaction_type=="EXPENSE":
                         self.data["account_bal"] -= money
@@ -140,40 +126,73 @@ class python_banking:
             return "SUCCESS"
              
 
+    def fetch_data(self,word:str,):
+        
+            Current_data : dict = self.data[f"{word.upper()}_HISTORY"] 
+            transactions:list = [(point,value) for point,value in Current_data.items() if Current_data[point]!=0]
+            return transactions
 
-
-            
-
-    # untouched files 
-    def generate_report(self):
+    def print_cat(self,word:str,less):   
+          transactions:list = self.fetch_data(word)
+          s = "  " + f"{word}-> {sum([val[1] for val in transactions])}"
+          print("|"+"  "+"-"*len(s)+" "*less(s+"  ")+"|")
+          print("|"+s+" "*less(s)+"|")
+          print("|"+"  "+"-"*len(s)+" "*less(s+"  ")+"|")
+                        
+          for trans , value in transactions:
+                s = f" {trans.lower()}-> {value}"
+                print("|"+s+" "*less(s)+"|")
+        
+    
+    def generate_report(self):   # completed
         print('\nLast transaction report\n')
-        default = 18 
-        print("┌" + "─" * 20 + "┐")
-        
+        default = 30 # must be even
+        print("┌" + "─" * (default) + "┐")
+        less = lambda x : default-len(x)
 
 
-        for i in range(12):
+        for i in range(10):
+          
           if i == 1 :
-               print("|"+" "*3+"PYTHON BANKING"+" "*3+"|")
-          elif i == 3 :
-               print("|"+" "*2+"Name - "+f"{self.name}"+" "*(default-len(self.name)-7)+"|")
-          elif i == 4 :
+               s = "PYTHON BANKING"
+               half = int(less(s)//2)
+               print("|"+"-"*(default)+"|")
+               print("|"+" "*half+s+" "*half+"|")
+               print("|"+"-"*(default)+"|")
+          elif i == 2 :
+               s = "  Name - "+f"{self.name}"
+               print("|"+s+" "*(default-len(s))+"|")
+               
+          elif i == 3  :
                account = self.data['bank_acc_name']
-               print("|"+" "*2+"Bank - "+f"{account}"+" "*(default-len(account)-7)+"|")
+               s = "  "+"Bank - "+f"{account}"
+               print("|"+s+" "*less(s)+"|")
+               print("|"+"-"*default+"|")
+
+          elif i == 5 :
+               s = "  Transactions"
+               
+               print("|"+s+" "*less(s)+"|")
+               
+               
           elif i == 6 :
-               print("|"+" "*2+"Transactions"+" "*6+"|")
-          elif i == 8 :
-               pass
+            self.print_cat("ADD",less)
+          elif i == 7 :
+                self.print_cat("EXPENSE",less)
+          elif i == 9 :
+               print("|"+"_"*default+"|")
+               s = " " + f"Current bank bal-> {self.data['account_bal']}"
+               print("|"+s+" "*less(s)+"|")
           else :              
-               print("|"+" "*(default+2)+"|")
+               print("|"+" "*(default)+"|")
             
         
-        print("└" + "─" * 20 + "┘")
-                    
+        print("└" + "─" * default + "┘")
+        print("REPORT DISPLAYED SUCCESSFULLY")
+        return self.proceed()             
        
 
-    def update_data(new_data): 
-        ...
+
  
 def Start_interaction(name):
     
@@ -195,8 +214,9 @@ def Start_interaction(name):
                                       
         avl_operations[user_req]() #--> evaluate_user_req
     
-    
 
-# # Start_interaction("nikhil") 
+
+# Start_interaction("nikhil") 
 # c = python_banking("nikhil")
 # c.generate_report()
+# # c.fetch_data("EXPENSE")
