@@ -221,7 +221,3 @@ def Start_interaction(name):
     
 
 
-Start_interaction("nikhil") 
-# c = python_banking("nikhil")
-# c.generate_report()
-# # c.fetch_data("EXPENSE")
