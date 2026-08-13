@@ -11,7 +11,7 @@ class python_banking:
               return True
          return False
 
-    def get_cat(self,prompt:str,categories:dict):
+    def get_cat(self,prompt:str,categories:list):
 
         while True: 
             user_cat = input(f"{prompt}\nEnter your categories: ").upper().strip()
@@ -29,10 +29,10 @@ class python_banking:
                 continue
             return amount
     
-    def Transaction_type(self,trans_type:str,Categories:dict,total_amount:int):
+    def Transaction_type(self,trans_type:str,Categories:list,total_amount:int):
             
             
-            prompt = ":\n".join(Categories.keys())
+            prompt = ":\n".join(Categories)
             total_added = 0  
             while True:
              
@@ -43,7 +43,7 @@ class python_banking:
              
                 Categories[user_cat] += amount
                 if sum(Categories.values()) == total_amount :
-                    print('\nTransaction completed')
+                    print('\nDone adding expenses')
                     self.data[f"{trans_type.upper()}_HISTORY"] = Categories
                     return Categories 
                 
@@ -91,15 +91,10 @@ class python_banking:
 
     
     def expense(self):# --> completed
-        while True:   
-                    expense_amount = number.get_positive("Enter the expense amount (₹): ")
-                    if expense_amount > self.data['account_bal']:
-                        print("Expense cannot be more then the total account balance :)")
-                        continue
-                    break  
-       
+        
+        expense_amount = number.get_positive("Enter the expense amount (₹): ")
     
-        expense_data = self.Transaction_type("EXPENSE",self.data['EXPENSE_HISTORY'],expense_amount)
+        expense_data = self.Transaction_type("EXPENSE",self.data["EXPENSE"],expense_amount)
         self.update_bank_balance(expense_amount,"EXPENSE")
         return self.proceed()
       
@@ -107,7 +102,7 @@ class python_banking:
 
         prompt = "How much money do you want to add : "
         money = number.get_positive(prompt)
-        self.Transaction_type("ADD",self.data["ADD_HISTORY"],money)
+        self.Transaction_type("ADD",self.ALL_categories["ADD"],money)
         self.update_bank_balance(money,"ADD")
 
         print("success")
@@ -120,6 +115,7 @@ class python_banking:
         with open(f"backend/{self.name}_data.txt","w") as f :  
             if transaction_type=="ADD":
                         self.data["account_bal"] += money
+
                         print('SUCCESS fully added into your bank balance ')
             elif transaction_type=="EXPENSE":
                         self.data["account_bal"] -= money
@@ -219,8 +215,3 @@ def Start_interaction(name):
         avl_operations[user_req]() #--> evaluate_user_req
     
 
-
-# Start_interaction("nikhil") 
-# c = python_banking("nikhil")
-# c.generate_report()
-# # c.fetch_data("EXPENSE")
