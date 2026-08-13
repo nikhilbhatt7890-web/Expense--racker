@@ -84,7 +84,8 @@ if __name__ == "__main__":
     exists_status = authenticate()
     if exists_status is None :
             terminate(USER_NAME)
-    start_working(exists_status)
+    else:             
+     start_working(exists_status)
 
 
     
