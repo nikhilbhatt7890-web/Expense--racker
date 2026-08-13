@@ -4,7 +4,7 @@ class python_banking:
     def __init__(self,name:str):
         self.name:str = name 
         self.data:dict = derive_data(name)
-        
+        self.current_sum = 0
     
     def compare(self,to_be_com,to_com):
          if to_be_com == to_com:
@@ -27,6 +27,7 @@ class python_banking:
             if amount > total_amount or amount + total_added > total_amount :
                 print('\n❌ Cannot be more than total expense')
                 continue
+            self.current_sum += amount
             return amount
     
     def Transaction_type(self,trans_type:str,Categories:dict,total_amount:int):
@@ -38,12 +39,12 @@ class python_banking:
              
                 user_cat = self.get_cat(prompt,Categories)
                 amount = self.get_amount(user_cat,total_amount,total_added)
-             
                 total_added += amount
-             
                 Categories[user_cat] += amount
-                if sum(Categories.values()) == total_amount :
+
+                if self.current_sum == total_amount :
                     print('\nTransaction completed')
+                    self.current_sum = 0 
                     self.data[f"{trans_type.upper()}_HISTORY"] = Categories
                     return Categories 
                 
@@ -220,7 +221,7 @@ def Start_interaction(name):
     
 
 
-# Start_interaction("nikhil") 
+Start_interaction("nikhil") 
 # c = python_banking("nikhil")
 # c.generate_report()
 # # c.fetch_data("EXPENSE")
